@@ -1,7 +1,7 @@
 ﻿using AdventOfCode2022;
-using AdventOfCode2022.Days;
 
 var currentDay = new CurrentDay();
+var isTestExecution = false;
 
 async Task Part1Async(bool test = true)
 {
@@ -16,6 +16,5 @@ async Task Part2Async(bool test = true)
     currentDay.Part2(inputs);
 }
 
-
-await Part1Async(false);
-await Part2Async(false);
+await Part1Async(isTestExecution);
+await Part2Async(isTestExecution);
