@@ -14,6 +14,7 @@ public class DaysTests
     [InlineData(6, "7")]
     [InlineData(7, "95437")]
     [InlineData(8, "21")]
+    [InlineData(9, "88")]
     public async Task TestDayPart1(int day, string result)
     {
         CurrentDay currentDayExecution = new (day);
@@ -33,6 +34,7 @@ public class DaysTests
     [InlineData(6, "19")]
     [InlineData(7, "24933642")]
     [InlineData(8, "8")]
+    [InlineData(9, "36")]
     public async Task TestDayPart2(int day, string result)
     {
         CurrentDay currentDayExecution = new (day);
