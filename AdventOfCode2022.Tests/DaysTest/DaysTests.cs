@@ -1,5 +1,6 @@
 ﻿using AdventOfCode2022.Days;
 using FluentAssertions;
+using System.Xml.XPath;
 
 namespace AdventOfCode2022.Tests.DaysTest;
 
@@ -15,6 +16,8 @@ public class DaysTests
     [InlineData(7, "95437")]
     [InlineData(8, "21")]
     [InlineData(9, "88")]
+    [InlineData(10, "13140")]
+    [InlineData(11, "10605")]
     public async Task TestDayPart1(int day, string result)
     {
         CurrentDay currentDayExecution = new (day);
@@ -35,8 +38,16 @@ public class DaysTests
     [InlineData(7, "24933642")]
     [InlineData(8, "8")]
     [InlineData(9, "36")]
+    [InlineData(10, $"##..##..##..##..##..##..##..##..##..##..|" +
+                    $"###...###...###...###...###...###...###.|" +
+                    $"####....####....####....####....####....|" +
+                    $"#####.....#####.....#####.....#####.....|" +
+                    $"######......######......######......####|" +
+                    $"#######.......#######.......#######.....")]
+    [InlineData(11, "2713310158")]
     public async Task TestDayPart2(int day, string result)
     {
+        result = result.Replace("|", Environment.NewLine);
         CurrentDay currentDayExecution = new (day);
         List<string> input = await FileManager.ReadFromFileAsync(day, true);
 
