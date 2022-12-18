@@ -1,6 +1,4 @@
-﻿using AdventOfCode2022.Days;
-using FluentAssertions;
-using System.Xml.XPath;
+﻿using FluentAssertions;
 
 namespace AdventOfCode2022.Tests.DaysTest;
 
@@ -18,6 +16,13 @@ public class DaysTests
     [InlineData(9, "88")]
     [InlineData(10, "13140")]
     [InlineData(11, "10605")]
+    [InlineData(12, "31")]
+    [InlineData(13, "13")]
+    [InlineData(14, "24")]
+    [InlineData(15, "4582667")]
+    [InlineData(16, "1651")]
+    [InlineData(17, "3068")]
+    [InlineData(18, "64")]
     public async Task TestDayPart1(int day, string result)
     {
         CurrentDay currentDayExecution = new (day);
@@ -45,6 +50,13 @@ public class DaysTests
                     $"######......######......######......####|" +
                     $"#######.......#######.......#######.....")]
     [InlineData(11, "2713310158")]
+    [InlineData(12, "29")]
+    [InlineData(13, "140")]
+    [InlineData(14, "93")]
+    [InlineData(15, "10961118625406")]
+    [InlineData(16, "1707")]
+    [InlineData(17, "1514285714288")]
+    [InlineData(18, "58")]
     public async Task TestDayPart2(int day, string result)
     {
         result = result.Replace("|", Environment.NewLine);

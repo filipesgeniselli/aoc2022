@@ -4,11 +4,211 @@ public class Day12 : IDay
 {
     public string Part1(List<string> inputs)
     {
-        throw new NotImplementedException();
+        var nodes = new Node[inputs.Count][];
+
+        Node start = default!;
+        Node end = default!;
+        for (int i = 0; i < inputs.Count; i++)
+        {
+            var inputLine = inputs[i];
+            nodes[i] = new Node[inputLine.Length];
+            for (var j = 0; j < inputLine.Length; j++)
+            {
+                var node = nodes[i][j] = new Node()
+                {
+                    Height = inputLine[j],
+                    X = j,
+                    Y = i
+                };
+
+                if (node.Height == 'S')
+                {
+                    start = nodes[i][j];
+                    start.Height = 'a';
+                }
+                else if (node.Height == 'E')
+                {
+                    end = nodes[i][j];
+                    end.Height = 'z';
+                }
+            }
+        }
+
+        return GetShortestPath(nodes, start, end).ShortestDistance.ToString();
     }
 
     public string Part2(List<string> inputs)
     {
-        throw new NotImplementedException();
+        var nodes = new Node[inputs.Count][];
+        var end = new List<Node>();
+        Node start = default!;
+        for (int i = 0; i < inputs.Count; i++)
+        {
+            var inputLine = inputs[i];
+            nodes[i] = new Node[inputLine.Length];
+            for (var j = 0; j < inputLine.Length; j++)
+            {
+                var node = nodes[i][j] = new Node()
+                {
+                    Height = inputLine[j],
+                    X = j,
+                    Y = i
+                };
+
+                if (node.Height == 'a')
+                {
+                    end.Add(nodes[i][j]);
+                }
+                else if (node.Height == 'S')
+                {
+                    var n = nodes[i][j];
+                    n.Height = 'a';
+                    end.Add(n);
+                }
+                else if (node.Height == 'E')
+                {
+                    start = nodes[i][j];
+                    start.Height = 'z';
+                }
+            }
+        }
+
+        return GetShortestPath(nodes, end, start).ToString();
+    }
+
+    private static int GetShortestPath(Node[][] nodes, List<Node> startNodes, Node end)
+    {
+        var min = int.MaxValue;
+        foreach (var start in startNodes)
+        {
+            foreach (var n in nodes.SelectMany(n => n))
+            {
+                n.Clear();
+            }
+
+            var path = GetShortestPath(nodes, start, end);
+
+            if (path.Visited && path.ShortestDistance < min)
+            {
+                min = path.ShortestDistance;
+            }
+        }
+
+        return min;
+    }
+
+    private static Node GetShortestPath(Node[][] nodes, Node start, Node end)
+    {
+        var visitedNodes = new List<Node>();
+        var nextNodes = new List<Node>();
+        start.Visited = true;
+        start.ShortestDistance = 0;
+        visitedNodes.Add(start);
+        GetNeighbours(nextNodes, nodes, start);
+
+        while (!end.Visited && nextNodes.Any())
+        {
+            Node closestNeighbour = nextNodes.First();
+            for (int i = 1; i < nextNodes.Count; i++)
+            {
+                var t = nextNodes[i];
+                if (t.ShortestDistance < closestNeighbour.ShortestDistance)
+                {
+                    closestNeighbour = t;
+                }
+            }
+
+            closestNeighbour.Visited = true;
+            visitedNodes.Add(closestNeighbour);
+            nextNodes.Remove(closestNeighbour);
+            GetNeighbours(nextNodes, nodes, closestNeighbour);
+        }
+
+        return end;
+    }
+
+    private static void GetNeighbours(List<Node> next, Node[][] nodes, Node node)
+    {
+        if (node.X - 1 >= 0)
+        {
+            var nextNode = nodes[node.Y][node.X - 1];
+            if (!nextNode.Visited && nextNode.Height <= node.Height + 1)
+            {
+                if (!next.Contains(nextNode))
+                {
+                    next.Add(nextNode);
+                }
+
+                if (node.ShortestDistance + 1 < nextNode.ShortestDistance)
+                {
+                    nextNode.ShortestDistance = node.ShortestDistance + 1;
+                }
+            }
+        }
+
+        if (node.X + 1 < nodes[0].Length)
+        {
+            var nextNode = nodes[node.Y][node.X + 1];
+            if (!nextNode.Visited && nextNode.Height <= node.Height + 1)
+            {
+                if (!next.Contains(nextNode))
+                {
+                    next.Add(nextNode);
+                }
+
+                if (node.ShortestDistance + 1 < nextNode.ShortestDistance)
+                {
+                    nextNode.ShortestDistance = node.ShortestDistance + 1;
+                }
+            }
+        }
+
+        if (node.Y - 1 >= 0)
+        {
+            var nextNode = nodes[node.Y - 1][node.X];
+            if (!nextNode.Visited && nextNode.Height <= node.Height + 1)
+            {
+                if (!next.Contains(nextNode))
+                {
+                    next.Add(nextNode);
+                }
+
+                if (node.ShortestDistance + 1 < nextNode.ShortestDistance)
+                {
+                    nextNode.ShortestDistance = node.ShortestDistance + 1;
+                }
+            }
+        }
+
+        if (node.Y + 1 < nodes.Length)
+        {
+            var nextNode = nodes[node.Y + 1][node.X];
+            if (!nextNode.Visited && nextNode.Height <= node.Height + 1)
+            {
+                if (!next.Contains(nextNode))
+                {
+                    next.Add(nextNode);
+                }
+
+                if (node.ShortestDistance + 1 < nextNode.ShortestDistance)
+                {
+                    nextNode.ShortestDistance = node.ShortestDistance + 1;
+                }
+            }
+        }
+    }
+}
+
+public class Node
+{
+    public int X { get; set; }
+    public int Y { get; set; }
+    public int Height { get; set; }
+    public int ShortestDistance { get; set; } = int.MaxValue;
+    public bool Visited { get; set; } = false;
+    public void Clear()
+    {
+        ShortestDistance = int.MaxValue;
+        Visited = false;
     }
 }
